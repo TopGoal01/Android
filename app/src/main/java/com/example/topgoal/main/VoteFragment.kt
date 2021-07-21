@@ -5,56 +5,55 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.topgoal.R
+import com.example.topgoal.adapter.VoteAdapter
+import com.example.topgoal.databinding.FragmentVoteBinding
+import com.example.topgoal.viewmodel.VoteViewModel
+import androidx.lifecycle.Observer
+import com.example.topgoal.model.Video
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [VoteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class VoteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    val voteVm: VoteViewModel by viewModels({ requireActivity() })
+    lateinit var adapter: VoteAdapter
+    lateinit var binding: FragmentVoteBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vote, container, false)
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_vote, container, false)
+        binding.lifecycleOwner = this
+
+        adapter = VoteAdapter()
+        adapter.voteList =  mutableListOf()
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        voteVm.voteList.observe(    viewLifecycleOwner, Observer {
+            adapter.voteList = voteVm.VoteList
+            adapter.notifyDataSetChanged()
+        })
+
+        binding.recyclerView.setWillNotDraw(false)
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment VoteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            VoteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.floatingActionButton.setOnClickListener {
+            voteVm.addVideo(Video(null, "제목", null, "13:32", 0))
+        }
     }
 }
