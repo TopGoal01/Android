@@ -61,6 +61,7 @@ class RoomActivity : AppCompatActivity() {
             }
             1 -> {
                 transaction.add(R.id.frameLayout, AddFragment()).commit()
+                (supportFragmentManager.findFragmentById(R.id.frameLayout) as MainFragment).setTabVote()
                 flag = 2
             }
             2 -> {

@@ -37,6 +37,11 @@ class MainFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager){tab, position ->
             tab.text = tabTitle[position]
         }.attach()
+
+    }
+
+    fun setTabVote(){
+        binding.tabLayout.getTabAt(1)?.select()
     }
 
 }
