@@ -19,6 +19,8 @@ class ChatViewModel: ViewModel() {
     }
 
     fun addChat(newChat: Chat){
+        if (newChat.content == "")
+            return
 
         ChatList.add(newChat)
         _chatList.value = ChatList
