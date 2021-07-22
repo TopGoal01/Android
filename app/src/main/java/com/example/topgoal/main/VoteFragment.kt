@@ -48,12 +48,4 @@ class VoteFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.floatingActionButton.setOnClickListener {
-            voteVm.addVideo(Video(null, "제목", null, "13:32", 0))
-        }
-    }
 }
