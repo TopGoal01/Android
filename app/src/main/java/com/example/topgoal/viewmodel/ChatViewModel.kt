@@ -15,6 +15,7 @@ class ChatViewModel: ViewModel() {
 
     init{
         _chatList.value = ChatList
+        addChat(Chat("강세희", "", "Hello", ""))
 
     }
 
