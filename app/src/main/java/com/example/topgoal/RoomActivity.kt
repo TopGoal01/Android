@@ -10,11 +10,41 @@ import androidx.appcompat.app.AlertDialog
 import com.example.topgoal.add.AddFragment
 import com.example.topgoal.databinding.ActivityRoomBinding
 import com.example.topgoal.main.MainFragment
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
+import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
 
 class RoomActivity : AppCompatActivity() {
 
+    private var threadStopflag = true
+    private lateinit var videoId:String
+
+    private val API_KEY = "//"
     val binding by lazy { ActivityRoomBinding.inflate(layoutInflater)}
     var flag = 0
+
+    private val youtubeListener = object: YouTubePlayer.OnInitializedListener{
+
+        override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
+            Toast.makeText(this@RoomActivity, "Content load fail..", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayer: YouTubePlayer, isReady: Boolean) {
+            if (!isReady) {
+                youtubePlayer.setPlaybackEventListener(playbackEventListener)
+                youtubePlayer.setPlayerStateChangeListener(playerStateChangeListener)
+
+                //TODO 멈춤 기능 삭제
+                youtubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT)
+
+                youtubePlayer.cueVideo(videoId)
+
+                //전체화면 버튼 숨김
+                youtubePlayer.setShowFullscreenButton(false)
+            }
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +58,16 @@ class RoomActivity : AppCompatActivity() {
 
         binding.btnChange.setOnClickListener {
             setFragment()
+        }
+
+        val mYoutubePlayerFragment = YouTubePlayerSupportFragmentX()
+        with(mYoutubePlayerFragment) {
+            initialize(API_KEY, youtubeListener)
+        }
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment_youtube, mYoutubePlayerFragment as androidx.fragment.app.Fragment)
+            commit()
         }
 
         binding.btnCopy.setOnClickListener {
@@ -71,4 +111,43 @@ class RoomActivity : AppCompatActivity() {
             }
         }
     }
+
+    private val  playbackEventListener: YouTubePlayer.PlaybackEventListener = object: YouTubePlayer.PlaybackEventListener{
+
+        override fun onSeekTo(p0: Int) {}
+
+        override fun onBuffering(p0: Boolean) {}
+
+        override fun onPlaying() {
+            threadStopflag = true
+        }
+
+        override fun onStopped() {
+        }
+
+        override fun onPaused() {
+            threadStopflag = false
+        }
+    }
+    private val playerStateChangeListener: YouTubePlayer.PlayerStateChangeListener = object: YouTubePlayer.PlayerStateChangeListener {
+
+        override fun onAdStarted() {
+        }
+
+        override fun onLoading() {
+        }
+
+        override fun onVideoStarted() {}
+
+        override fun onLoaded(p0: String?) {
+        }
+
+        override fun onVideoEnded() {
+        }
+
+        override fun onError(p0: YouTubePlayer.ErrorReason?) {
+        }
+    }
+
+    companion object {    val TAG = this::class.java.toString() }
 }
