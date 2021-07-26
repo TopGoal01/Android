@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.activity.viewModels
 import com.example.topgoal.add.AddFragment
 import com.example.topgoal.databinding.ActivityRoomBinding
 import com.example.topgoal.main.MainFragment
+import com.example.topgoal.viewmodel.YouTubeViewModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
@@ -17,12 +19,13 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
 class RoomActivity : AppCompatActivity() {
 
     private var threadStopflag = true
-    private var videoId:String = "eVaHUAdD2XU"
 
     private val API_KEY = "//"
     val binding by lazy { ActivityRoomBinding.inflate(layoutInflater)}
     var flag = 0
 
+    val youtubeVm: YouTubeViewModel by viewModels()
+    var curYouTubePlayer:YouTubePlayer? = null
     private val youtubeListener = object: YouTubePlayer.OnInitializedListener{
 
         override fun onInitializationFailure(p0: YouTubePlayer.Provider?, p1: YouTubeInitializationResult?) {
@@ -30,6 +33,7 @@ class RoomActivity : AppCompatActivity() {
         }
 
         override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayer: YouTubePlayer, isReady: Boolean) {
+            curYouTubePlayer = youtubePlayer
             if (!isReady) {
                 youtubePlayer.setPlaybackEventListener(playbackEventListener)
                 youtubePlayer.setPlayerStateChangeListener(object :
@@ -43,11 +47,8 @@ class RoomActivity : AppCompatActivity() {
                     override fun onVideoStarted() {}
 
                     override fun onLoaded(p0: String?) {
-                        youtubePlayer.cueVideo(videoId)
                         // 자동 재생
                         youtubePlayer.play()
-                        // 특정 시점부터 재생
-                        youtubePlayer.seekToMillis(123265)
                     }
 
                     override fun onVideoEnded() {
@@ -57,6 +58,7 @@ class RoomActivity : AppCompatActivity() {
                     }
                 })
 
+                youtubePlayer.cueVideo(youtubeVm.currentVideo.value, 123123)
                 // 상호작용 플레이어 컨트롤 삭제
                 youtubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS)
 
@@ -91,6 +93,9 @@ class RoomActivity : AppCompatActivity() {
             commit()
         }
 
+        youtubeVm.currentVideo.observe(this) {
+            curYouTubePlayer?.loadVideo(youtubeVm.currentVideo.value)
+        }
         binding.btnCopy.setOnClickListener {
             val myClipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip: ClipData = ClipData.newPlainText("RoomDomain", "http://github.com/sea1hee")

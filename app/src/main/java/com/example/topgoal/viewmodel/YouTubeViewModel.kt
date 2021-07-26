@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class RoomViewModel : ViewModel(){
+class YouTubeViewModel : ViewModel(){
 
     val _currentVideo =  MutableLiveData<String>()
     val currentVideo : LiveData<String> = _currentVideo
 
-    fun loadData() = viewModelScope.launch {
-        setVideo("F-KjYNmsi0U")
+    init{
+        setVideo("eVaHUAdD2XU")
     }
 
     fun setVideo(newVideoId: String){
