@@ -17,7 +17,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
 class RoomActivity : AppCompatActivity() {
 
     private var threadStopflag = true
-    private lateinit var videoId:String
+    private var videoId:String = "eVaHUAdD2XU"
 
     private val API_KEY = "//"
     val binding by lazy { ActivityRoomBinding.inflate(layoutInflater)}
@@ -32,12 +32,33 @@ class RoomActivity : AppCompatActivity() {
         override fun onInitializationSuccess(p0: YouTubePlayer.Provider?, youtubePlayer: YouTubePlayer, isReady: Boolean) {
             if (!isReady) {
                 youtubePlayer.setPlaybackEventListener(playbackEventListener)
-                youtubePlayer.setPlayerStateChangeListener(playerStateChangeListener)
+                youtubePlayer.setPlayerStateChangeListener(object :
+                        YouTubePlayer.PlayerStateChangeListener {
+                    override fun onAdStarted() {
+                    }
 
-                //TODO 멈춤 기능 삭제
-                youtubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT)
+                    override fun onLoading() {
+                    }
 
-                youtubePlayer.cueVideo(videoId)
+                    override fun onVideoStarted() {}
+
+                    override fun onLoaded(p0: String?) {
+                        youtubePlayer.cueVideo(videoId)
+                        // 자동 재생
+                        youtubePlayer.play()
+                        // 특정 시점부터 재생
+                        youtubePlayer.seekToMillis(123265)
+                    }
+
+                    override fun onVideoEnded() {
+                    }
+
+                    override fun onError(p0: YouTubePlayer.ErrorReason?) {
+                    }
+                })
+
+                // 상호작용 플레이어 컨트롤 삭제
+                youtubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS)
 
                 //전체화면 버튼 숨김
                 youtubePlayer.setShowFullscreenButton(false)
@@ -129,25 +150,4 @@ class RoomActivity : AppCompatActivity() {
             threadStopflag = false
         }
     }
-    private val playerStateChangeListener: YouTubePlayer.PlayerStateChangeListener = object: YouTubePlayer.PlayerStateChangeListener {
-
-        override fun onAdStarted() {
-        }
-
-        override fun onLoading() {
-        }
-
-        override fun onVideoStarted() {}
-
-        override fun onLoaded(p0: String?) {
-        }
-
-        override fun onVideoEnded() {
-        }
-
-        override fun onError(p0: YouTubePlayer.ErrorReason?) {
-        }
-    }
-
-    companion object {    val TAG = this::class.java.toString() }
 }
