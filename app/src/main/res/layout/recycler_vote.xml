@@ -42,13 +42,15 @@
         android:layout_weight="0.5"
         android:orientation="vertical">
 
-        <Button
+        <ToggleButton
             android:id="@+id/btn_up"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:background="@drawable/reco" />
+            android:textOn=""
+            android:textOff=""
+            android:background= "@drawable/toggle_check" />
 
         <TextView
             android:id="@+id/tx_up"

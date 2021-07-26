@@ -46,6 +46,17 @@ class VoteFragment : Fragment() {
 
         binding.recyclerView.setWillNotDraw(false)
 
+        adapter.setItemClickListener(object: VoteAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, isChecked: Boolean) {
+                if (isChecked) {
+                    voteVm.setAddVideoUP(position)
+
+                } else {
+                    voteVm.setSubVideoUp(position)
+                }
+            }
+        })
+
         return binding.root
     }
 }

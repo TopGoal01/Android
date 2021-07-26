@@ -30,4 +30,15 @@ class VoteViewModel: ViewModel() {
     fun getVideoList(positon: Int): Video?{
         return VoteList.get(0)
     }
+
+    fun setAddVideoUP(position: Int){
+        VoteList[position].up += 1
+        _voteList.value = VoteList
+    }
+
+    fun setSubVideoUp(position: Int){
+        VoteList[position].up -= 1
+        _voteList.value = VoteList
+    }
+
 }
