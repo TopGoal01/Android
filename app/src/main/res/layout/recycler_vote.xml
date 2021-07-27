@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     app:cardCornerRadius="10dp"
     android:elevation="8dp"
     android:layout_marginLeft="6dp"
@@ -13,7 +13,7 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="match_parent"
     android:orientation="horizontal">
 
     <ImageView
@@ -21,12 +21,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:padding="10dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -34,8 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
             android:text="Title"
             android:textColor="@color/black"
             android:maxLines="1"
@@ -45,8 +45,8 @@
             android:id="@+id/tx_playtime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="00:00" />
+            android:text="00:00"
+            android:textColor="@color/gray"/>
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +61,6 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
             android:textOn=""
             android:textOff=""
             android:background= "@drawable/toggle_check" />
