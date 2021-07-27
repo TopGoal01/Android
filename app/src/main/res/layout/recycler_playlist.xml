@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="동영상 31개"
-        android:textColor="@drawable/select_playlist_text" />
+        android:textColor="@color/gray" />
 
     <View
         android:id="@+id/line1"
