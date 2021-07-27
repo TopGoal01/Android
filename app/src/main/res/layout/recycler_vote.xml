@@ -37,7 +37,9 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:text="Title"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/tx_playtime"
