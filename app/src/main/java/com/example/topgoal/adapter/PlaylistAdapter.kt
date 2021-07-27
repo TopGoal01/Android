@@ -46,6 +46,6 @@ class PlaylistAdapter: RecyclerView.Adapter<PlaylistHolder>() {
 class PlaylistHolder(val binding: RecyclerPlaylistBinding): RecyclerView.ViewHolder(binding.root){
     fun setPlayList(playlist: Playlist){
         binding.txPlaylistName.text = playlist.name
-        binding.txCount.text = "동영상 ${playlist.count}개"
+        binding.txCount.text = "동영상 ${playlist.videoList?.size?:0}개"
     }
 }

@@ -1,7 +1,7 @@
 package com.example.topgoal.model
 
 data class Video(
-    var link: String? = null,
+    var id: String? = null,
     var name: String? = null,
     var thumbnail: String? = null,
     var playTime: String? = null,
