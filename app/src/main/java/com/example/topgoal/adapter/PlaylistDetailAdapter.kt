@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.RecyclerPlaylistDetailBinding
 import com.example.topgoal.model.Video
 
@@ -47,5 +48,9 @@ class PlaylistDetailAdapter: RecyclerView.Adapter<PlaylistDetailHolder>() {
 
 class PlaylistDetailHolder(val binding: RecyclerPlaylistDetailBinding): RecyclerView.ViewHolder(binding.root){
     fun setVideo(Video: Video){
+        binding.txTitle.text = Video.name
+        Glide.with(itemView)
+            .load(Video.thumbnail)
+            .into(binding.thumbnail)
     }
 }

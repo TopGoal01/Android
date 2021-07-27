@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.RecyclerVoteBinding
 import com.example.topgoal.model.Video
 
@@ -50,8 +51,11 @@ class VoteHolder(val binding: RecyclerVoteBinding): RecyclerView.ViewHolder(bind
     fun setVideo(vote: Video){
         binding.txTitle.text = vote.name
         binding.txPlaytime.text = vote.playTime
-        // 썸네일 사진
         binding.txUp.text = "${vote.up}"
+        Glide.with(itemView)
+            .load(vote.thumbnail)
+            .into(binding.thumbnail)
+
     }
 
 }
