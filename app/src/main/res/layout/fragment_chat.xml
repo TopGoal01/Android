@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -42,6 +43,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:backgroundTint="@color/purple"
+                android:textCursorDrawable="@color/purple"
+                android:textColorHighlight="@color/purple"
+                android:textSelectHandle="@drawable/select_handler"
+                android:textSelectHandleLeft="@drawable/select_handler"
+                android:textSelectHandleRight="@drawable/select_handler"
                 android:ems="10"
                 android:inputType="textPersonName" />
 
@@ -49,7 +56,10 @@
                 android:id="@+id/btn_chat"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
                 android:layout_weight="1"
+                android:background="@drawable/button_round"
+                android:textColor="@color/white"
                 android:text="SEND" />
         </LinearLayout>
 
