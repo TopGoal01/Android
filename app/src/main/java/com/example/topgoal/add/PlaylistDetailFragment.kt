@@ -12,6 +12,7 @@ import com.example.topgoal.RoomActivity
 import com.example.topgoal.adapter.PlaylistDetailAdapter
 import com.example.topgoal.databinding.FragmentPlaylistDetailBinding
 import com.example.topgoal.model.Video
+import com.example.topgoal.viewmodel.PlayListViewModel
 import com.example.topgoal.viewmodel.VoteViewModel
 
 
@@ -20,6 +21,8 @@ class PlaylistDetailFragment : Fragment() {
     lateinit var adapter: PlaylistDetailAdapter
     lateinit var binding: FragmentPlaylistDetailBinding
     val voteVm: VoteViewModel by viewModels({ requireActivity() })
+    val playlistVm: PlayListViewModel by viewModels({ requireActivity() })
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +36,7 @@ class PlaylistDetailFragment : Fragment() {
         binding = FragmentPlaylistDetailBinding.inflate(inflater, container, false)
 
         adapter = PlaylistDetailAdapter()
-        var data = mutableListOf<Video>()
-        data.add(Video("","Title", "","10:00", 0))
-        data.add(Video("", "Title", "", "10:10", 0))
-        adapter.videoList = data
+        adapter.videoList = playlistVm.PlayList.get(requireArguments().getInt("position")).videoList!!
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
