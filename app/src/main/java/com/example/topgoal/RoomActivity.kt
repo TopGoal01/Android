@@ -20,7 +20,7 @@ class RoomActivity : AppCompatActivity() {
 
     private var threadStopflag = true
 
-    private val API_KEY = "//"
+    private val API_KEY: String = "${BuildConfig.YOUTUBE_API_KEY}"
     val binding by lazy { ActivityRoomBinding.inflate(layoutInflater)}
     var flag = 0
 
