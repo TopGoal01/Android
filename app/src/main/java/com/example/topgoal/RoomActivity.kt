@@ -96,6 +96,11 @@ class RoomActivity : AppCompatActivity() {
         youtubeVm.currentVideo.observe(this) {
             curYouTubePlayer?.loadVideo(youtubeVm.currentVideo.value)
         }
+
+        youtubeVm.title.observe(this){
+            binding.txTitle.text = youtubeVm.title.value
+        }
+
         binding.btnCopy.setOnClickListener {
             val myClipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip: ClipData = ClipData.newPlainText("RoomDomain", "http://github.com/sea1hee")

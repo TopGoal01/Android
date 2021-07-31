@@ -22,4 +22,11 @@ interface PlayListInterface {
         @Query("maxResults") maxResults: Int = 50
     ):PlayListItems
 
+    @GET("videos")
+    suspend fun getVideo(
+            @Query("key")key: String,
+            @Query("part")part: String,
+            @Query("id") id:String
+    ): PlayList
+
 }

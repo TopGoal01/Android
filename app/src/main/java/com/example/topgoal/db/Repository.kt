@@ -11,6 +11,20 @@ class Repository {
     private val API_KEY: String = "//"
     private val ChannelId: String = "UCg09VbrEk1N0WrHflZi2rDA"
 
+    suspend fun getVideoTitle(VideoId: String): String{
+        val RetCo = CoroutineScope(Dispatchers.IO).async {
+            val response: PlayList = PlayListService.client!!.getVideo(
+                    API_KEY,
+                    "snippet",
+                    VideoId
+            )
+            response
+        }
+        //val response = RetCo.await()
+        //val title :String = response.items.get(0).snippet.title
+        return RetCo.await().items.get(0).snippet.title
+    }
+
     suspend fun getPlaylist(): List<Playlist> {
         val RetCo = CoroutineScope(Dispatchers.IO).async {
             val response: PlayList = PlayListService.client!!.getPlayList(
