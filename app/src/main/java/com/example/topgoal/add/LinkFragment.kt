@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.example.topgoal.R
 import com.example.topgoal.RoomActivity
 import com.example.topgoal.databinding.FragmentLinkBinding
 import com.example.topgoal.model.Video
 import com.example.topgoal.viewmodel.VoteViewModel
+import com.example.topgoal.viewmodel.YouTubeViewModel
 
 
 class LinkFragment : Fragment() {
 
-    private var binding : FragmentLinkBinding? = null
+    private lateinit var binding : FragmentLinkBinding
     val voteVm: VoteViewModel by viewModels({ requireActivity() })
+    val youtubeVm: YouTubeViewModel by viewModels({ requireActivity() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +32,35 @@ class LinkFragment : Fragment() {
     ): View? {
         binding = FragmentLinkBinding.inflate(inflater, container, false)
 
-
-        binding!!.btnAdd.setOnClickListener {
-            voteVm.addVideo(Video(null, "예시", null, "에시", 0))
-            Toast.makeText(requireContext(),"후보 목록에 추가되었습니다.", Toast.LENGTH_LONG).show()
-            (activity as RoomActivity).setFragment()
+        youtubeVm.searchVideo.observe(viewLifecycleOwner) {
+            Glide.with(binding.root).load(youtubeVm.searchVideo.value?.thumbnail)
+                .into(binding.imageView)
+            binding.txTitle.text = youtubeVm.searchVideo.value?.name
         }
 
-        return binding!!.root
-    }
+        binding.btnSearch.setOnClickListener{
+            if (youtubeVm.isYoutube(binding.edtLink.text.toString())) {
+                youtubeVm.getThumbnail(binding.edtLink.text.toString())
+            }
+            else{
+                Toast.makeText(requireContext(), "유튜브 링크가 아닙니다.", Toast.LENGTH_LONG).show()
+            }
+        }
 
+        binding.btnAdd.setOnClickListener {
+            if (youtubeVm.searchVideo.value?.id != null) {
+                voteVm.addVideo(youtubeVm.searchVideo.value!!)
+                Toast.makeText(requireContext(), "후보 목록에 추가되었습니다.", Toast.LENGTH_LONG).show()
+                youtubeVm.searchVideo.value = Video()
+                (activity as RoomActivity).setFragment()
+            }
+            else{
+                Toast.makeText(requireContext(), "링크를 입력해주세요.", Toast.LENGTH_LONG).show()
+
+            }
+
+        }
+
+        return binding.root
+    }
 }

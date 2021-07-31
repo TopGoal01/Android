@@ -26,6 +26,21 @@ class Repository {
         return RetCo.await().items.get(0).snippet.title
     }
 
+
+    suspend fun getVideo(VideoId: String): Video{
+        val RetCo = CoroutineScope(Dispatchers.IO).async {
+            val response: PlayList = PlayListService.client!!.getVideo(
+                API_KEY,
+                "snippet",
+                VideoId
+            )
+            response
+        }
+        val retVideo = RetCo.await().items.get(0)
+        return Video(VideoId, retVideo.snippet.title, retVideo.snippet.thumbnails.standard.url)
+    }
+
+
     suspend fun getPlaylist(): List<Playlist> {
         val RetCo = CoroutineScope(Dispatchers.IO).async {
             val response: PlayList = PlayListService.client!!.getPlayList(
