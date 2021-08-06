@@ -10,14 +10,18 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabSelectedTextColor="@color/purple_bold"
-        app:tabRippleColor="@color/purple_bold"
-        app:tabIndicatorColor="@color/purple_bold"
+        android:layout_height="40dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/viewPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabRippleColor="@color/purple_light2"
+        app:tabTextColor="@color/white"
+        app:tabSelectedTextColor="@color/purple_light2"
+        android:background="@drawable/tablayout"
+        app:tabBackground="@drawable/tablayout_selector"
+        app:tabIndicatorHeight="0dp">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
