@@ -49,6 +49,7 @@ class PlaylistDetailAdapter: RecyclerView.Adapter<PlaylistDetailHolder>() {
 class PlaylistDetailHolder(val binding: RecyclerPlaylistDetailBinding): RecyclerView.ViewHolder(binding.root){
     fun setVideo(Video: Video){
         binding.txTitle.text = Video.name
+        binding.txPlaytime.text = Video.playTime
         Glide.with(itemView)
             .load(Video.thumbnail)
             .into(binding.thumbnail)
