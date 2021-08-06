@@ -31,7 +31,7 @@ class LinkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLinkBinding.inflate(inflater, container, false)
-        binding.btnAdd.isInvisible = true
+        binding.btnAdd.visibility = View.INVISIBLE
         binding.imageView.setImageResource(0)
         binding.txTitle.text = " "
 
@@ -44,7 +44,7 @@ class LinkFragment : Fragment() {
         binding.btnSearch.setOnClickListener{
             if (youtubeVm.isYoutube(binding.edtLink.text.toString())) {
                 youtubeVm.getThumbnail(binding.edtLink.text.toString())
-                binding.btnAdd.isInvisible = false
+                binding.btnAdd.visibility = View.VISIBLE
             }
             else{
                 Toast.makeText(requireContext(), "유튜브 링크가 아닙니다.", Toast.LENGTH_LONG).show()
