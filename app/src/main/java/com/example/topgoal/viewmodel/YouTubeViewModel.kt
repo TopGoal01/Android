@@ -22,15 +22,20 @@ class YouTubeViewModel : ViewModel(){
         setVideo("eVaHUAdD2XU")
         viewModelScope.launch {
             title.value = repository.getVideoTitle(currentVideo.value.toString())
+            repository.getVideoDuration(currentVideo.value.toString())
         }
     }
 
     fun getThumbnail(url:String){
         val videoId = getVideoId(url)
         viewModelScope.launch {
-            searchVideo.postValue(repository.getVideo(videoId))
+            val newVideo = repository.getVideo(videoId)
+            newVideo.playTime = repository.getVideoDuration(videoId)
+            searchVideo.postValue(newVideo)
         }
     }
+
+
 
     fun getVideoId(url: String):String{
         var videoId: String = ""
