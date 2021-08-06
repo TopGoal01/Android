@@ -31,9 +31,9 @@
         <LinearLayout
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:orientation="horizontal"
-            android:layout_marginLeft="7dp"
+            android:background="@drawable/fragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -41,8 +41,10 @@
             <EditText
                 android:id="@+id/edt_chat"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
+                android:layout_marginLeft="7dp"
+                android:background="@null"
                 android:backgroundTint="@color/purple_light"
                 android:textCursorDrawable="@color/purple_light"
                 android:textColorHighlight="@color/purple_light"
@@ -52,14 +54,16 @@
                 android:ems="10"
                 android:inputType="textPersonName" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_chat"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_round"
-                android:textColor="@color/white"
-                android:text="SEND" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:src="@drawable/send"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:background="@drawable/fragment"
+                android:padding="8dp"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
