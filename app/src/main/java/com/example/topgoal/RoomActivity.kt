@@ -5,6 +5,8 @@ import android.content.ClipboardManager
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.activity.viewModels
@@ -76,7 +78,7 @@ class RoomActivity : AppCompatActivity() {
         setFragment()
 
         binding.btnBack.setOnClickListener {
-            alertBack()
+            onBackPressed()
         }
 
         binding.btnChange.setOnClickListener {
@@ -97,7 +99,7 @@ class RoomActivity : AppCompatActivity() {
             curYouTubePlayer?.loadVideo(youtubeVm.currentVideo.value)
         }
 
-        youtubeVm.title.observe(this){
+        youtubeVm.title.observe(this) {
             binding.txTitle.text = youtubeVm.title.value
         }
 
@@ -105,22 +107,24 @@ class RoomActivity : AppCompatActivity() {
             val myClipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip: ClipData = ClipData.newPlainText("RoomDomain", "http://github.com/sea1hee")
             myClipboard.setPrimaryClip(myClip)
-            Toast.makeText(this,"링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun alertBack(){
-        val builder = AlertDialog.Builder(this)
-            .setMessage("방을 나가시겠습니까?")
-            .setPositiveButton("나가기",
-                DialogInterface.OnClickListener { dialog, id ->
-                    onBackPressed()
-                })
-            .setNegativeButton("취소",
-                DialogInterface.OnClickListener{ dialog, id ->
+    override fun onBackPressed() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit, null)
+        val builder = AlertDialog.Builder(this).setView(dialogView)
+        val dialog = builder.show()
 
-                })
-            .show()
+        val yesBtn = dialogView.findViewById<Button>(R.id.btn_yes)
+        val noBtn = dialogView.findViewById<Button>(R.id.btn_no)
+
+        yesBtn.setOnClickListener{
+            super.onBackPressed()
+        }
+        noBtn.setOnClickListener{
+            dialog.dismiss()
+        }
     }
 
     fun setFragment() {
