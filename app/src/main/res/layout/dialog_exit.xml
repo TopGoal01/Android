@@ -34,6 +34,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/button_round"
+            android:textColor="@color/white"
             android:text="yes" />
 
         <Button
@@ -42,6 +43,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/button_round"
+            android:textColor="@color/white"
             android:text="no" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
