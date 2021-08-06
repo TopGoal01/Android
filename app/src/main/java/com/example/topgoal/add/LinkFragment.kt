@@ -1,14 +1,15 @@
 package com.example.topgoal.add
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
-import com.example.topgoal.R
 import com.example.topgoal.RoomActivity
 import com.example.topgoal.databinding.FragmentLinkBinding
 import com.example.topgoal.model.Video
@@ -49,6 +50,7 @@ class LinkFragment : Fragment() {
             else{
                 Toast.makeText(requireContext(), "유튜브 링크가 아닙니다.", Toast.LENGTH_SHORT).show()
             }
+            hideKeyboard()
         }
 
         binding.btnAdd.setOnClickListener {
@@ -67,4 +69,10 @@ class LinkFragment : Fragment() {
 
         return binding.root
     }
+
+    fun hideKeyboard(){
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.edtLink.windowToken, 0)
+    }
+
 }
