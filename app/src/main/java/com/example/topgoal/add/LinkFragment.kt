@@ -47,19 +47,19 @@ class LinkFragment : Fragment() {
                 binding.btnAdd.visibility = View.VISIBLE
             }
             else{
-                Toast.makeText(requireContext(), "유튜브 링크가 아닙니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "유튜브 링크가 아닙니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.btnAdd.setOnClickListener {
             if (youtubeVm.searchVideo.value?.id != null) {
                 voteVm.addVideo(youtubeVm.searchVideo.value!!)
-                Toast.makeText(requireContext(), "후보 목록에 추가되었습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "후보 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                 youtubeVm.searchVideo.value = Video()
                 (activity as RoomActivity).setFragment()
             }
             else{
-                Toast.makeText(requireContext(), "링크를 입력해주세요.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "링크를 입력해주세요.", Toast.LENGTH_SHORT).show()
 
             }
 

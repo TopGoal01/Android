@@ -105,7 +105,7 @@ class RoomActivity : AppCompatActivity() {
             val myClipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip: ClipData = ClipData.newPlainText("RoomDomain", "http://github.com/sea1hee")
             myClipboard.setPrimaryClip(myClip)
-            Toast.makeText(this,"링크가 복사되었습니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 

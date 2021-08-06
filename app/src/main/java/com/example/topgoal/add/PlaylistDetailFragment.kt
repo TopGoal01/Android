@@ -43,7 +43,7 @@ class PlaylistDetailFragment : Fragment() {
         adapter.setItemclickListener( object: PlaylistDetailAdapter.ItemClickListener{
             override fun onClick(view: View, position: Int) {
                 voteVm.addVideo(adapter.videoList[position])
-                Toast.makeText(requireContext(), "후보 목록에 추가되었습니다.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "후보 목록에 추가되었습니다.", Toast.LENGTH_SHORT).show()
                 (activity as RoomActivity).setFragment()
             }
         })
