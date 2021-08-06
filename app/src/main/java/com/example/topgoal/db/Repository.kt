@@ -26,6 +26,37 @@ class Repository {
         return RetCo.await().items.get(0).snippet.title
     }
 
+    suspend fun getVideoDuration(VideoId: String):String{
+        val RetCo = CoroutineScope(Dispatchers.IO).async {
+            val response: PlayList = PlayListService.client!!.getVideo(
+                    API_KEY,
+                    "contentDetails",
+                    VideoId
+            )
+            response
+        }
+        //val response = RetCo.await()
+        //val title :String = response.items.get(0).snippet.title
+        return getPlayTime(RetCo.await().items.get(0).contentDetails.duration)
+    }
+
+    fun getPlayTime(duration:String):String{
+        val indexOfM = duration.indexOf('M')
+        val indexOfS = duration.indexOf('S')
+        var m = if (indexOfM == -1) "0" else duration.substring(2, indexOfM)
+        var s = let {
+            when {
+                indexOfM == -1 -> duration.substring(2, duration.length - 1)
+                indexOfS == -1 -> "0"
+                else -> duration.substring(indexOfM + 1, indexOfS)
+            }
+        }
+        m = if (m.length == 1) "0".plus(m) else m
+        s = if (s.length == 1) "0".plus(s) else s
+
+        return "${m}:${s}"
+    }
+
 
     suspend fun getVideo(VideoId: String): Video{
         val RetCo = CoroutineScope(Dispatchers.IO).async {

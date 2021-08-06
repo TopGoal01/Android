@@ -24,6 +24,16 @@ class PlayListViewModel: ViewModel() {
         }
     }
 
+    fun setPlaylistDuration(){
+        viewModelScope.launch {
+            for(i in 0..PlayList.size-1){
+                for(j in 0..PlayList[i].videoList.size-1){
+                    PlayList[i].videoList[j].playTime = repository.getVideoDuration(PlayList[i].videoList[j].id!!)
+                }
+            }
+        }
+    }
+
     fun getPlaylist(position: Int): Playlist?{
         return PlayList[position]
     }

@@ -22,7 +22,21 @@ data class Item(
     val etag: String,
     val id: String,
     val kind: String,
-    val snippet: Snippet
+    val snippet: Snippet,
+    val contentDetails: ContentDetails
+)
+
+data class ContentDetails(
+        val caption: String,
+        val contentRating: ContentRating,
+        val definition: String,
+        val dimension: String,
+        val duration: String,
+        val licensedContent: Boolean,
+        val projection: String
+)
+
+class ContentRating(
 )
 
 data class Maxres(

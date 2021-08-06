@@ -37,6 +37,7 @@ class PlaylistFragment : Fragment() {
         playlistVm.playList.observe(viewLifecycleOwner){
             adapter.playlist = playlistVm.PlayList
             adapter.notifyDataSetChanged()
+            playlistVm.setPlaylistDuration()
         }
 
         adapter.setItemclickListener( object: PlaylistAdapter.ItemClickListener{
