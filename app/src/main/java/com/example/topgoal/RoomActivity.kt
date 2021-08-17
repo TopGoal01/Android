@@ -38,27 +38,7 @@ class RoomActivity : AppCompatActivity() {
             curYouTubePlayer = youtubePlayer
             if (!isReady) {
                 youtubePlayer.setPlaybackEventListener(playbackEventListener)
-                youtubePlayer.setPlayerStateChangeListener(object :
-                        YouTubePlayer.PlayerStateChangeListener {
-                    override fun onAdStarted() {
-                    }
-
-                    override fun onLoading() {
-                    }
-
-                    override fun onVideoStarted() {}
-
-                    override fun onLoaded(p0: String?) {
-                        // 자동 재생
-                        youtubePlayer.play()
-                    }
-
-                    override fun onVideoEnded() {
-                    }
-
-                    override fun onError(p0: YouTubePlayer.ErrorReason?) {
-                    }
-                })
+                youtubePlayer.setPlayerStateChangeListener(playerStateChangeListener)
 
                 youtubePlayer.cueVideo(youtubeVm.currentVideo.value, 123123)
                 // 상호작용 플레이어 컨트롤 삭제
@@ -147,7 +127,29 @@ class RoomActivity : AppCompatActivity() {
         }
     }
 
-    private val  playbackEventListener: YouTubePlayer.PlaybackEventListener = object: YouTubePlayer.PlaybackEventListener{
+    private val playerStateChangeListener: YouTubePlayer.PlayerStateChangeListener = object : YouTubePlayer.PlayerStateChangeListener {
+        override fun onAdStarted() {
+        }
+
+        override fun onLoading() {
+        }
+
+        override fun onVideoStarted() {}
+
+        override fun onLoaded(p0: String?) {
+            // 자동 재생
+           curYouTubePlayer?.play()
+        }
+
+        override fun onVideoEnded() {
+        }
+
+        override fun onError(p0: YouTubePlayer.ErrorReason?) {
+        }
+    }
+
+
+    private val playbackEventListener: YouTubePlayer.PlaybackEventListener = object: YouTubePlayer.PlaybackEventListener{
 
         override fun onSeekTo(p0: Int) {}
 
