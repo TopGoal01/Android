@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.topgoal.db.Repository
+import com.example.topgoal.db.YoutubeRepository
 import com.example.topgoal.model.Video
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
@@ -17,7 +17,7 @@ class YouTubeViewModel : ViewModel(){
     val _currentVideo =  MutableLiveData<String>()
     val currentVideo : LiveData<String> = _currentVideo
 
-    val repository = Repository()
+    val repository = YoutubeRepository()
     init{
         setVideo("eVaHUAdD2XU")
         viewModelScope.launch {

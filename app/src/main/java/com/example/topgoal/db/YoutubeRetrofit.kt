@@ -4,7 +4,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class BaseRetrofit {
+class YoutubeRetrofit {
     fun getClient(baseUrl: String): Retrofit? = Retrofit.Builder()
         .baseUrl(baseUrl).client(OkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())
@@ -14,5 +14,5 @@ class BaseRetrofit {
 object PlayListService {
     private const val PlayListUrl = "https://www.googleapis.com/youtube/v3/"
 
-    val client = BaseRetrofit().getClient(PlayListUrl)?.create(PlayListInterface::class.java)
+    val client = YoutubeRetrofit().getClient(PlayListUrl)?.create(PlayListInterface::class.java)
 }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.topgoal.db.Repository
+import com.example.topgoal.db.YoutubeRepository
 import com.example.topgoal.model.Playlist
 import kotlinx.coroutines.launch
 
@@ -15,7 +15,7 @@ class PlayListViewModel: ViewModel() {
     private val _playList = MutableLiveData<List<Playlist>>()
     var playList: LiveData<List<Playlist>> = _playList
 
-    val repository = Repository()
+    val repository = YoutubeRepository()
 
     init {
         viewModelScope.launch {

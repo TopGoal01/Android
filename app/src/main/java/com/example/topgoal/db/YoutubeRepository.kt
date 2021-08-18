@@ -6,7 +6,7 @@ import com.example.topgoal.model.Playlist
 import com.example.topgoal.model.Video
 import kotlinx.coroutines.*
 
-class Repository {
+class YoutubeRepository {
 
     val TAG = "Repository"
     private val API_KEY: String = "${BuildConfig.YOUTUBE_API_KEY}"
