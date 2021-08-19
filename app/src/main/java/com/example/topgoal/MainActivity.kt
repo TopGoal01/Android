@@ -1,21 +1,29 @@
 package com.example.topgoal
 
+import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.topgoal.databinding.ActivityMainBinding
+import com.example.topgoal.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
-
-    val binding by lazy { ActivityMainBinding.inflate(layoutInflater)}
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        binding.button.setOnClickListener {
-            val intent = Intent(this, RoomActivity::class.java)
-            startActivity(intent)
-        }
+        val mainFragment = HomeFragment.newInstance(intent.getStringExtra("name"), intent.getStringExtra("email"))
+        supportFragmentManager.beginTransaction().add(R.id.frameLayout, mainFragment).commit()
+
+
+    }
+
+    fun returnToPage(intent: Intent) {
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 }

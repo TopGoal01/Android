@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_01">30sp</dimen>
+    <dimen name="text_02">15sp</dimen>
+    <dimen name="button_01">20sp</dimen>
+    <dimen name="icon_01">30dp</dimen>
+
+    <dimen name="image_01">60dp</dimen>
+    <dimen name="size_01">100dp</dimen>
+
+    <dimen name="image_02">15dp</dimen>
+    <dimen name="space_01">10dp</dimen>
+    <dimen name="space_02">80dp</dimen>
+
+    <dimen name="space_03">20dp</dimen>
+    <dimen name="text_03">25sp</dimen>
+</resources>
