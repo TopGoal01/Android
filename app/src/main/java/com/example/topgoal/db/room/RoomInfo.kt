@@ -1,7 +1,7 @@
 package com.example.topgoal.db.room
 
-data class RoomId(
-    val admin: Admin,
+data class RoomInfo(
+    val admin: User,
     val createdDate: String,
     val roomId: String,
     val roomName: String,

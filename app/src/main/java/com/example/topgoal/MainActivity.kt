@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
 
         val mainFragment = HomeFragment.newInstance(intent.getStringExtra("name"), intent.getStringExtra("email"))
         supportFragmentManager.beginTransaction().add(R.id.frameLayout, mainFragment).commit()
-
-
     }
 
     fun returnToPage(intent: Intent) {

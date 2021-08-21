@@ -1,3 +1,7 @@
 package com.example.topgoal.db.room
 
-class Room : ArrayList<RoomItem>()
+data class Room(
+    val joinId: Int,
+    val roomId: RoomInfo,
+    val userId: User
+)
