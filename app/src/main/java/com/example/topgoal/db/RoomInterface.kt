@@ -1,8 +1,8 @@
 package com.example.topgoal.db
 
-import com.example.topgoal.db.room.RoomInfo
-import com.example.topgoal.db.room.RoomList
-import com.example.topgoal.db.room.User
+import com.example.topgoal.db.roomItem.RoomInfo
+import com.example.topgoal.db.roomItem.RoomList
+import com.example.topgoal.db.roomItem.User
 import retrofit2.http.*
 
 interface RoomInterface {

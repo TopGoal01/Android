@@ -1,4 +1,4 @@
-package com.example.topgoal.db.room
+package com.example.topgoal.db.roomItem
 
 data class User(
     val email: String,
