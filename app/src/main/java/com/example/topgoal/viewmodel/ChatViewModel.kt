@@ -15,7 +15,7 @@ class ChatViewModel: ViewModel() {
 
     init{
         _chatList.value = ChatList
-        addChat(Chat("강세희", "", "Hello", ""))
+        // 웹 소켓 연결
 
     }
 
@@ -29,5 +29,9 @@ class ChatViewModel: ViewModel() {
 
     fun getChatList(positon: Int): Chat?{
         return ChatList.get(0)
+    }
+
+    fun detroyWebSocket(){
+       //웹 소켓 연결 해제
     }
 }

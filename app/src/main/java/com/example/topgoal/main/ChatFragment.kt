@@ -43,7 +43,8 @@ class ChatFragment : Fragment() {
         chatVm.chatList.observe(    viewLifecycleOwner, Observer {
             adapter.chatList = chatVm.ChatList
             adapter.notifyDataSetChanged()
-            binding.recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            if( adapter.itemCount >= 1)
+                binding.recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
         })
 
 
