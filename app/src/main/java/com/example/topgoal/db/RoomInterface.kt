@@ -3,6 +3,7 @@ package com.example.topgoal.db
 import com.example.topgoal.db.roomItem.RoomInfo
 import com.example.topgoal.db.roomItem.RoomList
 import com.example.topgoal.db.roomItem.User
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RoomInterface {
@@ -21,38 +22,38 @@ interface RoomInterface {
     suspend fun postRoom(
             @Path("roomId") roomId: String,
             @Query("user") user: String
-    ): RoomInfo
+    ): Response<RoomInfo>
 
     @GET("room/users")
     suspend fun getRoomUser(
             @Query("roomId") roomId: String
-    ): RoomList
+    ): Response<RoomList>
 
     @POST("user/{roomId}")
     suspend fun postEnter(
             @Path("roomId") roomId: String,
             @Query("userId") userId: String
-    ): RoomInfo
+    ): Response<RoomInfo>
 
     @DELETE("user/{roomId}")
-    suspend fun leaveRoom(
+    suspend fun deleteRoomUser(
             @Path("roomId") roomId: String,
             @Query("userId") userId: String
     )
 
     @GET("user/rooms")
-    suspend fun getUserRooms(
+    suspend fun getUsers(
             @Query("userId") userId: String
-    ): RoomList
+    ): Response<RoomList>
 
     @GET("user/{userId}")
     suspend fun getUserInfo(
             @Path("userId") userId: String
-    ): User
+    ): Response<User>
 
     @POST("user/{userToken}")
     suspend fun postUserAuth(
             @Path("userToken") userToken: String
-    ): User
+    ): Response<User>
 
 }

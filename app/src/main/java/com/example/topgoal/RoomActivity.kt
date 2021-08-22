@@ -12,11 +12,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.activity.viewModels
 import com.example.topgoal.add.AddFragment
 import com.example.topgoal.databinding.ActivityRoomBinding
+import com.example.topgoal.db.RoomRepository
 import com.example.topgoal.main.MainFragment
 import com.example.topgoal.viewmodel.YouTubeViewModel
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragmentX
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
 class RoomActivity : AppCompatActivity() {
 
@@ -85,7 +89,7 @@ class RoomActivity : AppCompatActivity() {
 
         binding.btnCopy.setOnClickListener {
             val myClipboard: ClipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val myClip: ClipData = ClipData.newPlainText("RoomDomain", "http://github.com/sea1hee")
+            val myClip: ClipData = ClipData.newPlainText("RoomDomain", "${RoomRepository.roomId}")
             myClipboard.setPrimaryClip(myClip)
             Toast.makeText(this, "링크가 복사되었습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -101,6 +105,7 @@ class RoomActivity : AppCompatActivity() {
 
         yesBtn.setOnClickListener{
             super.onBackPressed()
+            RoomRepository.deleteRoomOrUser()
         }
         noBtn.setOnClickListener{
             dialog.dismiss()
