@@ -56,17 +56,14 @@ class ChatFragment : Fragment() {
 
         binding.btnChat.setOnClickListener {
             val content = binding.edtChat.text.toString()
-            val newChat = Chat("강세희", "",content, getCurrentTime())
-            chatVm.addChat(newChat)
+            chatVm.send(content)
             binding.edtChat.setText(null)
         }
     }
 
-    fun getCurrentTime():String{
-        val time = System.currentTimeMillis()
-        var sdf = SimpleDateFormat("HH:mm")
-        var formattedDate = sdf.format(time)
-        return formattedDate
+    override fun onDestroy() {
+        chatVm.destoryWebSocket()
+        super.onDestroy()
     }
 
 }
