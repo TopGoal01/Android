@@ -1,22 +1,27 @@
 <resources>
-    <string name="app_name">App</string>
-    <string name="text_01">APP NAME</string>
-    <string name="text_02">APP NAME에 오신 것을 진심으로 환영합니다.\n방을 만들어 사람들과 대화해보세요!</string>
-    <string name="button_01">구글 로그인</string>
-    <string name="toast_01">로그아웃 되었습니다</string>
-    <string name="toast_02">회원탈퇴 되었습니다</string>
+    <string name="app_name">티지톡</string>
+    <string name="logo">Logo</string>
+    <string name="describe">티지톡에 오신 것을 진심으로 환영합니다.\n방을 만들어 사람들과 대화해보세요!</string>
+    <string name="login">Google 로그인</string>
+    <string name="snackbar_logout">로그아웃 되었습니다</string>
+    <string name="snackbar_delete">회원탈퇴 되었습니다</string>
 
-    <string name="content_01">사용자</string>
-    <string name="button_02">방 생성</string>
-    <string name="button_03">방 참가</string>
+    <string name="user">사용자</string>
+    <string name="btn_create">방 생성</string>
+    <string name="btn_start">방 참가</string>
 
-    <string name="content_02">닫기</string>
-    <string name="button_04">로그아웃</string>
-    <string name="button_05">회원탈퇴</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete">회원탈퇴</string>
 
-    <string name="edit_01">방 링크</string>
-    <string name="button_06">참가</string>
-    <string name="button_07">취소</string>
+    <string name="url">방 링크</string>
+    <string name="join">참가</string>
+
+    <string name="logout_message">로그아웃 하시겠습니까?</string>
+    <string name="delete_message">회원탈퇴 하시겠습니까?</string>
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="negative">취소하다</string>
+    <string name="positive">확인하다</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

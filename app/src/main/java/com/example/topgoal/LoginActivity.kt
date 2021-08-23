@@ -1,22 +1,22 @@
 package com.example.topgoal
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.topgoal.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -27,15 +27,16 @@ class LoginActivity : AppCompatActivity() {
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
+            val view = binding.coordinatorLayout
             if (it.data?.getStringExtra("logout") != null) {
                 googleSignInClient.signOut()
 
-                Toast.makeText(this, R.string.toast_01, Toast.LENGTH_LONG).show()
+                Snackbar.make(view, R.string.snackbar_logout, Snackbar.LENGTH_SHORT).show()
             }
             else if (it.data?.getStringExtra("delete") != null) {
                 googleSignInClient.revokeAccess()
 
-                Toast.makeText(this, R.string.toast_02, Toast.LENGTH_LONG).show()
+                Snackbar.make(view, R.string.snackbar_delete, Snackbar.LENGTH_SHORT).show()
             }
         }
     }

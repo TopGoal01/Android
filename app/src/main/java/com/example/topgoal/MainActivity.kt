@@ -21,4 +21,9 @@ class MainActivity : AppCompatActivity() {
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 0) finishAffinity()
+        super.onBackPressed()
+    }
 }
