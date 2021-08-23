@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+
+    id 'com.google.gms.google-services'
 }
 
 Properties properties = new Properties()
@@ -92,5 +94,14 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    
+    // Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:28.3.0')
+    // Google Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Firebase Authentication library
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    // Google Play services library
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
 }
