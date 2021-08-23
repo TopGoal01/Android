@@ -1,25 +1,20 @@
 package com.example.topgoal
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentUserDialogBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class UserDialogFragment: DialogFragment() {
     private var _binding: FragmentUserDialogBinding? = null
     private val binding get() = _binding!!
-
-    private var mainActivity: MainActivity? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,40 +23,22 @@ class UserDialogFragment: DialogFragment() {
     ): View? {
         _binding = FragmentUserDialogBinding.inflate(inflater, container, false)
         val view = binding.root
-        val returnIntent = Intent()
         val user = Firebase.auth.currentUser!!
         user.let {
             for (profile in it.providerData) {
-                binding.text3.text = profile.displayName
-                binding.text4.text = profile.email
+                binding.name.text = profile.displayName
+                binding.email.text = profile.email
                 Glide.with(this).load(profile.photoUrl)
                     .circleCrop()
                     .into(binding.imageView)
             }
         }
-        binding.imageButton2.setOnClickListener { dismiss() }
-        binding.button4.setOnClickListener {
-            Firebase.auth.signOut()
-
-            returnIntent.putExtra("logout", binding.button4.text)
-            mainActivity?.returnToPage(returnIntent)
-
-            dismiss()
+        binding.appBar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
+        binding.logout.setOnClickListener {
+            createAlertDialog(R.string.logout_message, "logout")
         }
-        binding.button5.setOnClickListener {
-            Firebase.auth.signOut()
-            try {
-                user.delete()
-            } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(mainActivity?.intent)
-                val credential = GoogleAuthProvider.getCredential(task.getResult(e::class.java).idToken, null)
-                user.reauthenticate(credential).addOnCompleteListener { user.delete() }
-            }
-
-            returnIntent.putExtra("delete", binding.button5.text)
-            mainActivity?.returnToPage(returnIntent)
-
-            dismiss()
+        binding.delete.setOnClickListener {
+            createAlertDialog(R.string.delete_message, "delete")
         }
         return view
     }
@@ -71,8 +48,11 @@ class UserDialogFragment: DialogFragment() {
         _binding = null
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
+    private fun createAlertDialog(message: Int, name: String) {
+        parentFragmentManager.commit {
+            add(android.R.id.content, AlertDialogFragment.newInstance(message, name))
+            addToBackStack("AlertDialog")
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        }
     }
 }

@@ -1,73 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/space_01"
-        android:layout_marginEnd="@dimen/space_01"
-        android:layout_marginBottom="@dimen/space_01"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/content_02"
-        android:src="@drawable/ic_close_24dp" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/space_02"
-        android:layout_height="@dimen/space_02"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_02"
-        android:layout_marginEnd="@dimen/space_02"
-        android:layout_marginBottom="@dimen/space_01"
-        android:src="@drawable/user" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="@drawable/ic_close_24dp" />
 
-    <TextView
-        android:id="@+id/text3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_02"
-        android:layout_marginEnd="@dimen/space_02"
-        android:layout_marginBottom="@dimen/space_01"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_02" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/text4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_02"
-        android:layout_marginEnd="@dimen/space_02"
-        android:layout_marginBottom="@dimen/space_01"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_02" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/img_user"
+            android:layout_height="@dimen/img_user"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/icon"
+            android:layout_marginEnd="@dimen/icon"
+            android:contentDescription="@string/user" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginEnd="@dimen/icon"
+            android:layout_marginBottom="@dimen/space_10"
+            android:layout_toEndOf="@id/imageView"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/describe" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginEnd="@dimen/icon"
+            android:layout_marginBottom="@dimen/space_20"
+            android:layout_toEndOf="@id/imageView"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/describe" />
+
+    </RelativeLayout>
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:id="@+id/logout"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_02"
-        android:layout_marginEnd="@dimen/space_02"
-        android:layout_marginBottom="@dimen/space_01"
-        android:text="@string/button_04"
-        android:textSize="@dimen/text_02" />
+        android:text="@string/logout"
+        android:textColor="@color/purple_bold"
+        android:textSize="@dimen/describe" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
+        android:id="@+id/delete"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_02"
-        android:layout_marginEnd="@dimen/space_02"
-        android:layout_marginBottom="@dimen/space_01"
-        android:text="@string/button_05"
-        android:textSize="@dimen/text_02" />
+        android:text="@string/delete"
+        android:textColor="@color/purple_bold"
+        android:textSize="@dimen/describe" />
 
 </LinearLayout>

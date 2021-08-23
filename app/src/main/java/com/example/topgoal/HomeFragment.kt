@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentHomeBinding
@@ -21,21 +22,28 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.imageButton.setOnClickListener { UserDialogFragment().show(parentFragmentManager, "userDialog") }
-        binding.button2.setOnClickListener {
+        binding.user.setOnClickListener {
+            parentFragmentManager.commit {
+                add(android.R.id.content, UserDialogFragment())
+                addToBackStack(null)
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            }
+        }
+        binding.create.setOnClickListener {
             val intent = Intent(requireContext(), RoomActivity::class.java)
             startActivity(intent)
         }
-        binding.button3.setOnClickListener {
+        binding.start.setOnClickListener {
             parentFragmentManager.commit {
                 add(R.id.frameLayout, RoomFragment())
                 addToBackStack("roomFragment")
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             }
         }
 
         Glide.with(this).load(Firebase.auth.currentUser?.photoUrl)
             .circleCrop()
-            .into(binding.imageButton)
+            .into(binding.user)
 
         return view
     }
