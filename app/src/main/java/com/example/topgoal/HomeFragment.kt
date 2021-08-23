@@ -1,6 +1,5 @@
 package com.example.topgoal
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,25 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentHomeBinding
-
-private const val ARG_NAME = "name"
-private const val ARG_EMAIL = "email"
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private var mainActivity: MainActivity? = null
-
-    private var name: String? = null
-    private var email: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            name = it.getString(ARG_NAME)
-            email = it.getString(ARG_EMAIL)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +21,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.imageButton.setOnClickListener {
-            val dialog = UserDialogFragment()
-            val bundle = Bundle()
-            bundle.putString("text3", name)
-            bundle.putString("text4", email)
-            dialog.arguments = bundle
-            dialog.show(parentFragmentManager, "userDialog")
-        }
+        binding.imageButton.setOnClickListener { UserDialogFragment().show(parentFragmentManager, "userDialog") }
         binding.button2.setOnClickListener {
             val intent = Intent(requireContext(), RoomActivity::class.java)
             startActivity(intent)
@@ -52,22 +32,11 @@ class HomeFragment : Fragment() {
                 addToBackStack("roomFragment")
             }
         }
+
+        Glide.with(this).load(Firebase.auth.currentUser?.photoUrl)
+            .circleCrop()
+            .into(binding.imageButton)
+
         return view
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(name: String?, email: String?) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_NAME, name)
-                    putString(ARG_EMAIL, email)
-                }
-            }
     }
 }
