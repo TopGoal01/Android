@@ -22,25 +22,23 @@ class UserDialogFragment: DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUserDialogBinding.inflate(inflater, container, false)
-        val view = binding.root
-        val user = Firebase.auth.currentUser!!
-        user.let {
+        Firebase.auth.currentUser?.let {
             for (profile in it.providerData) {
-                binding.name.text = profile.displayName
-                binding.email.text = profile.email
+                binding.txtName.text = profile.displayName
+                binding.txtEmail.text = profile.email
                 Glide.with(this).load(profile.photoUrl)
                     .circleCrop()
-                    .into(binding.imageView)
+                    .into(binding.imgUser)
             }
         }
         binding.appBar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
-        binding.logout.setOnClickListener {
-            createAlertDialog(R.string.logout_message, "logout")
+        binding.btnLogout.setOnClickListener {
+            startAlertDialog(R.string.msg_logout, "logout")
         }
-        binding.delete.setOnClickListener {
-            createAlertDialog(R.string.delete_message, "delete")
+        binding.btnDelete.setOnClickListener {
+            startAlertDialog(R.string.msg_delete, "delete")
         }
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -48,7 +46,7 @@ class UserDialogFragment: DialogFragment() {
         _binding = null
     }
 
-    private fun createAlertDialog(message: Int, name: String) {
+    private fun startAlertDialog(message: Int, name: String) {
         parentFragmentManager.commit {
             add(android.R.id.content, AlertDialogFragment.newInstance(message, name))
             addToBackStack("AlertDialog")

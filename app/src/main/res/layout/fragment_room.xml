@@ -25,26 +25,26 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
-        android:id="@+id/url"
+        android:id="@+id/txt_url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/space_20"
         android:layout_marginBottom="@dimen/space_20"
         android:ems="13"
-        android:hint="@string/url"
+        android:hint="@string/txt_url"
         android:inputType="textUri"
-        android:textSize="@dimen/btn" />
+        android:textSize="@dimen/txt_big" />
 
     <Button
-        android:id="@+id/join"
+        android:id="@+id/btn_join"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/purple"
+        android:background="@drawable/button"
         android:ems="13"
-        android:text="@string/join"
+        android:text="@string/btn_join"
         android:textColor="@color/white"
-        android:textSize="@dimen/btn" />
+        android:textSize="@dimen/txt_big" />
 
 </LinearLayout>

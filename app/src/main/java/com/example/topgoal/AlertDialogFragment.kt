@@ -37,12 +37,11 @@ class AlertDialogFragment: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAlertDialogBinding.inflate(inflater, container, false)
-        val view = binding.root
         val returnIntent = Intent()
         val user = Firebase.auth.currentUser!!
-        binding.message.text = message
-        binding.negative.setOnClickListener { parentFragmentManager.popBackStack() }
-        binding.positive.setOnClickListener {
+        binding.txtMessage.text = message
+        binding.btnNegative.setOnClickListener { parentFragmentManager.popBackStack() }
+        binding.btnPositive.setOnClickListener {
             Firebase.auth.signOut()
             if (name == "delete") {
                 try {
@@ -56,11 +55,9 @@ class AlertDialogFragment: DialogFragment() {
 
             returnIntent.putExtra(name, message)
             mainActivity?.returnToPage(returnIntent)
-
-            dismiss()
         }
         binding.constraintLayout.setOnClickListener { parentFragmentManager.popBackStack() }
-        return view
+        return binding.root
     }
 
     override fun onAttach(context: Context) {

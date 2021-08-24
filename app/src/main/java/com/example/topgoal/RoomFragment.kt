@@ -18,7 +18,7 @@ class RoomFragment : Fragment() {
         binding = FragmentRoomBinding.inflate(inflater, container, false)
 
         binding.appBar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
-        binding.join.setOnClickListener {
+        binding.btnJoin.setOnClickListener {
             val intent = Intent(requireContext(), RoomActivity::class.java)
             startActivity(intent)
         }

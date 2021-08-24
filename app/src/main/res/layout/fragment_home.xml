@@ -7,13 +7,13 @@
     tools:context=".HomeFragment">
 
     <ImageButton
-        android:id="@+id/user"
+        android:id="@+id/btn_user"
         android:layout_width="@dimen/img_user"
         android:layout_height="@dimen/img_user"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/user"
+        android:contentDescription="@string/img_user"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@id/start"
+        app:layout_constraintBottom_toTopOf="@id/btn_start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,29 +21,29 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/create"
+        android:id="@+id/btn_create"
         android:layout_width="@dimen/btn_size"
         android:layout_height="@dimen/btn_size"
-        android:backgroundTint="@color/purple"
+        android:background="@drawable/button"
         android:text="@string/btn_create"
         android:textColor="@color/white"
-        android:textSize="@dimen/btn"
+        android:textSize="@dimen/txt_big"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/start"
+        app:layout_constraintEnd_toStartOf="@id/btn_start"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/start"
+        android:id="@+id/btn_start"
         android:layout_width="@dimen/btn_size"
         android:layout_height="@dimen/btn_size"
-        android:backgroundTint="@color/purple"
+        android:background="@drawable/button"
         android:text="@string/btn_start"
         android:textColor="@color/white"
-        android:textSize="@dimen/btn"
+        android:textSize="@dimen/txt_big"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/create"
+        app:layout_constraintStart_toEndOf="@id/btn_create"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

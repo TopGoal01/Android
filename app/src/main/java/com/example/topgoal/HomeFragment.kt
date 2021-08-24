@@ -21,30 +21,29 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        binding.user.setOnClickListener {
-            parentFragmentManager.commit {
-                add(android.R.id.content, UserDialogFragment())
-                addToBackStack(null)
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            }
+        binding.btnUser.setOnClickListener {
+            startFragment(UserDialogFragment(), null)
         }
-        binding.create.setOnClickListener {
+        binding.btnCreate.setOnClickListener {
             val intent = Intent(requireContext(), RoomActivity::class.java)
             startActivity(intent)
         }
-        binding.start.setOnClickListener {
-            parentFragmentManager.commit {
-                add(R.id.frameLayout, RoomFragment())
-                addToBackStack("roomFragment")
-                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            }
+        binding.btnStart.setOnClickListener {
+            startFragment(RoomFragment(), "roomFragment")
         }
 
         Glide.with(this).load(Firebase.auth.currentUser?.photoUrl)
             .circleCrop()
-            .into(binding.user)
+            .into(binding.btnUser)
 
-        return view
+        return binding.root
+    }
+
+    private fun startFragment(fragment: Fragment, name: String?) {
+        parentFragmentManager.commit {
+            add(android.R.id.content, fragment)
+            addToBackStack(name)
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        }
     }
 }

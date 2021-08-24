@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.button.setOnClickListener { handleSignInResult.launch(googleSignInClient.signInIntent) }
+        binding.btnLogin.setOnClickListener { handleSignInResult.launch(googleSignInClient.signInIntent) }
 
         binding.constraintLayout.addView(CustomView(this))
 
