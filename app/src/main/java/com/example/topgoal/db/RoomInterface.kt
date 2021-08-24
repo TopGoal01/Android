@@ -18,10 +18,9 @@ interface RoomInterface {
             @Path("roomId") roomId: String
     )
 
-    @POST("room/{roomId}")
+    @POST("room/{userID}")
     suspend fun postRoom(
-            @Path("roomId") roomId: String,
-            @Query("user") user: String
+            @Path("userID") userId: String,
     ): Response<RoomInfo>
 
     @GET("room/users")

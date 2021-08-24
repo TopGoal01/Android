@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.topgoal.databinding.ActivityLoginBinding
+import com.example.topgoal.db.RoomRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -84,10 +86,25 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(tag, "signInWithCredential:success")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if (checkNewUser(idToken)) {
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    RoomRepository.postUserAuth(idToken)
+                                }
+                            }
+                        }
                         updateUI()
                     }
                     else Log.w(tag, "signInWithCredential:failure", task.exception)
                 }
+    }
+
+
+    suspend fun checkNewUser(idToken: String):Boolean {
+        val RetCo = CoroutineScope(Dispatchers.IO).async {
+            RoomRepository.getUserInfo(idToken)
+        }
+        return RetCo.await()
     }
 
     private fun updateUI() {

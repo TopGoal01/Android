@@ -11,6 +11,7 @@ import retrofit2.Response
 class RoomRepository {
 
     companion object {
+        lateinit var userToken: String
         lateinit var userId: String
         lateinit var userName: String
         lateinit var userPic: String
@@ -71,8 +72,7 @@ class RoomRepository {
         suspend fun postRoom(): Boolean {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response: Response<RoomInfo> = InformationService.client!!.postRoom(
-                        roomId = roomId,
-                        user = userId
+                        userId
                 )
                 if (response.isSuccessful) {
                     setRoom(response.body()!!)
@@ -100,16 +100,12 @@ class RoomRepository {
             return RetCo.await()
         }
 
-        suspend fun getUserInfo(searchUserId: String): User? {
+        suspend fun getUserInfo(searchUserId: String): Boolean {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response: Response<User> = InformationService.client!!.getUserInfo(
                         userId = searchUserId
                 )
-                if (response.isSuccessful) {
-                    response.body()
-                } else {
-                    null
-                }
+                response.isSuccessful
             }
             return RetCo.await()
         }
