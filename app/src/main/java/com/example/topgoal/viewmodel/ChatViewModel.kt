@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompMessage
 import java.text.SimpleDateFormat
 
 
@@ -23,7 +24,7 @@ class ChatViewModel: ViewModel() {
     var chatList: LiveData<List<Chat>> = _chatList
 
     val TAG = "ChatWebSocket"
-    private val url = ""
+    private val url = "ws://3.38.34.47:8080/websocket/"
 
     private lateinit var mStompClient :StompClient
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
@@ -41,25 +42,17 @@ class ChatViewModel: ViewModel() {
                         LifecycleEvent.Type.OPENED -> {
                             registerSubscriptions()
                         }
+                        LifecycleEvent.Type.ERROR -> {
+                            Log.d(TAG, TAG, lifecycleEvent.exception)
+                        }
                         LifecycleEvent.Type.CLOSED -> {
                         }
-                        LifecycleEvent.Type.ERROR -> {
-                        }
                         LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT -> {
-                        }
-                        else -> {
-                            Log.d(TAG, "Null LifecycleEvent")
                         }
                     }
                 })
 
-        // 채팅방 참가 메세지 전송
-        compositeDisposable.add(mStompClient
-                .send("/app/join", "").subscribe({
-                    Log.v(TAG, "message sent")
-                }, {
-                    Log.e(TAG, it.stackTrace.toString())
-                }))
+
     }
 
     fun addChat(newChat: Chat){
@@ -74,10 +67,10 @@ class ChatViewModel: ViewModel() {
         mStompClient.disconnect()
     }
 
-    // receive message
+    // open chatting room
     private fun registerSubscriptions() {
         compositeDisposable.add(
-                mStompClient.topic("/app/message/").subscribe { topicMessage ->
+                mStompClient.topic("/topic/chat/${RoomRepository.roomId}").subscribe { topicMessage ->
                     val ChatInfo = Gson().fromJson(topicMessage.payload, Chat::class.java)
                     addChat(ChatInfo)
                 })
@@ -85,13 +78,13 @@ class ChatViewModel: ViewModel() {
 
     //send message
     fun send(message: String) {
-        val newChat :Chat = Chat(    RoomRepository.userName,
+        val newChat :Chat = Chat(RoomRepository.userName,
                 RoomRepository.userPic,
                 message,
                 getCurrentTime())
 
         compositeDisposable.add(mStompClient
-                .send("/topic/chat/${RoomRepository.roomId}", makeJsonString(newChat)).subscribe ({
+                .send("/app/message/", makeJsonString(newChat)).subscribe({
                     Log.v(TAG, "message sent")
                 }, {
                     Log.e(TAG, it.stackTrace.toString())
