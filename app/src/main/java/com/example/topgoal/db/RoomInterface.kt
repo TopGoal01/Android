@@ -8,6 +8,7 @@ import retrofit2.http.*
 
 interface RoomInterface {
 
+    //Room
     @GET("room/{roomId}")
     suspend fun getRoom(
             @Path("roomId") roomId: String
@@ -18,36 +19,38 @@ interface RoomInterface {
             @Path("roomId") roomId: String
     )
 
-    @POST("room/{userID}")
+    @POST("room/{userToken}")
     suspend fun postRoom(
             @Path("userID") userId: String,
     ): Response<RoomInfo>
 
-    @GET("room/users")
+    //Room Member
+    @GET("member/users")
     suspend fun getRoomUser(
             @Query("roomId") roomId: String
     ): Response<RoomList>
 
-    @POST("user/{roomId}")
+    @POST("member/{roomId}")
     suspend fun postEnter(
             @Path("roomId") roomId: String,
-            @Query("userId") userId: String
+            @Query("userToken") userToken: String
     ): Response<RoomInfo>
 
-    @DELETE("user/{roomId}")
+    @DELETE("member/{roomId}")
     suspend fun deleteRoomUser(
             @Path("roomId") roomId: String,
-            @Query("userId") userId: String
+            @Query("userToken") userToken: String
     )
 
-    @GET("user/rooms")
+    @GET("member/rooms")
     suspend fun getUsers(
-            @Query("userId") userId: String
+            @Query("userToken") userToken: String
     ): Response<RoomList>
 
-    @GET("user/{userId}")
+    //User
+    @GET("user/{userToken}")
     suspend fun getUserInfo(
-            @Path("userId") userId: String
+            @Path("userToken") userToken: String
     ): Response<User>
 
     @POST("user/{userToken}")

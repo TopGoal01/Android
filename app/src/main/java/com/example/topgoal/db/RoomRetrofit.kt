@@ -12,6 +12,6 @@ class RoomRetrofit {
 }
 
 object InformationService {
-    private const val retrofitUrl = ""
+    private const val retrofitUrl = "http://3.38.34.47:8080/"
     val client = RoomRetrofit().getClient(retrofitUrl)?.create(RoomInterface::class.java)
 }

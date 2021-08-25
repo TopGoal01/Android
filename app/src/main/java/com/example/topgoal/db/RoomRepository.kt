@@ -100,12 +100,17 @@ class RoomRepository {
             return RetCo.await()
         }
 
-        suspend fun getUserInfo(searchUserId: String): Boolean {
+        suspend fun getUserInfo(searchUserToken: String): User? {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response: Response<User> = InformationService.client!!.getUserInfo(
-                        userId = searchUserId
+                        userToken = searchUserToken
                 )
-                response.isSuccessful
+                if(response.isSuccessful){
+                    response.body()
+                }
+                else{
+                    null
+                }
             }
             return RetCo.await()
         }
