@@ -14,25 +14,23 @@ class RoomRepository {
         lateinit var userToken: String
         lateinit var userId: String
         lateinit var userName: String
-        lateinit var userPic: String
+        var userPic: String? = null
 
         lateinit var roomId: String
-        lateinit var roomName: String
         lateinit var adminId: String
 
         fun setRoomNull() {
             roomId = ""
-            roomName = ""
             adminId = ""
         }
 
         fun setRoom(currentRoom: RoomInfo) {
             adminId = currentRoom.admin.id
-            roomName = currentRoom.roomName
             roomId = currentRoom.roomId
         }
 
         fun setCurrentUser(currentUser: User) {
+            userToken = currentUser.idToken
             userId = currentUser.id
             userName = currentUser.name
             userPic = currentUser.userPic
@@ -61,7 +59,7 @@ class RoomRepository {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response = InformationService.client!!.deleteRoomUser(
                         roomId = roomId,
-                        userId = userId
+                        userToken = userToken
                 )
             }
             if (RetCo.isCompleted) {
@@ -72,7 +70,7 @@ class RoomRepository {
         suspend fun postRoom(): Boolean {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response: Response<RoomInfo> = InformationService.client!!.postRoom(
-                        userId
+                        userToken
                 )
                 if (response.isSuccessful) {
                     setRoom(response.body()!!)
@@ -88,7 +86,7 @@ class RoomRepository {
             val RetCo = CoroutineScope(Dispatchers.IO).async {
                 val response: Response<RoomInfo> = InformationService.client!!.postEnter(
                         roomId = curRoomId,
-                        userId = userId
+                        userToken = userToken
                 )
                 if (response.isSuccessful) {
                     setRoom(response.body()!!)

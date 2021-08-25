@@ -21,7 +21,7 @@ interface RoomInterface {
 
     @POST("room/{userToken}")
     suspend fun postRoom(
-            @Path("userID") userId: String,
+            @Path("userToken") usertoken: String,
     ): Response<RoomInfo>
 
     //Room Member
