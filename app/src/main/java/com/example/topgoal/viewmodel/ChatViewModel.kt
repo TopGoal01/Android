@@ -24,15 +24,14 @@ class ChatViewModel: ViewModel() {
     var chatList: LiveData<List<Chat>> = _chatList
 
     val TAG = "ChatWebSocket"
-    private val url = "ws://3.38.34.47:8080/websocket/"
+    private val url = "ws://ec2-3-38-34-47.ap-northeast-2.compute.amazonaws.com:8080/websocket"
 
-    private lateinit var mStompClient :StompClient
+    private var mStompClient :StompClient
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     init {
         _chatList.value = ChatList
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
-        mStompClient.connect()
 
         compositeDisposable.add(mStompClient.lifecycle()
                 .subscribeOn(Schedulers.io())
@@ -40,6 +39,7 @@ class ChatViewModel: ViewModel() {
                 .subscribe { lifecycleEvent ->
                     when (lifecycleEvent.type) {
                         LifecycleEvent.Type.OPENED -> {
+                            Log.d(TAG,"chat Web Socket Open!")
                             registerSubscriptions()
                         }
                         LifecycleEvent.Type.ERROR -> {
@@ -52,8 +52,19 @@ class ChatViewModel: ViewModel() {
                     }
                 })
 
+        mStompClient.connect()
+
+        // 채팅방 참가 메세지 전송
+        compositeDisposable.add(mStompClient
+                .send("/app/join", "").subscribe({
+                    Log.v(TAG, "Join Chat")
+                }, {
+                    Log.e(TAG, it.stackTrace.toString())
+                }))
 
     }
+
+
 
     fun addChat(newChat: Chat){
         if (newChat.content == "")
@@ -70,10 +81,13 @@ class ChatViewModel: ViewModel() {
     // open chatting room
     private fun registerSubscriptions() {
         compositeDisposable.add(
-                mStompClient.topic("/topic/chat/${RoomRepository.roomId}").subscribe { topicMessage ->
+                mStompClient.topic("/topic/chat/${RoomRepository.roomId}").subscribe ({ topicMessage->
                     val ChatInfo = Gson().fromJson(topicMessage.payload, Chat::class.java)
                     addChat(ChatInfo)
-                })
+                    Log.d(TAG,"Receive Message")
+                        }, {
+                    Log.e(TAG, it.stackTrace.toString())
+                        }))
     }
 
     //send message
@@ -85,7 +99,7 @@ class ChatViewModel: ViewModel() {
 
         compositeDisposable.add(mStompClient
                 .send("/app/message/", makeJsonString(newChat)).subscribe({
-                    Log.v(TAG, "message sent")
+                    Log.v(TAG, "Send Message")
                 }, {
                     Log.e(TAG, it.stackTrace.toString())
                 }))
