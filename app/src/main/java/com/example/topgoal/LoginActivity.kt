@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.topgoal.databinding.ActivityLoginBinding
 import com.example.topgoal.db.RoomRepository
+import com.example.topgoal.db.roomItem.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -22,7 +23,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -75,24 +80,13 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
     }
 
-    override fun onStart() {
-        super.onStart()
-        updateUI()
-    }
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(tag, "signInWithCredential:success")
-                        CoroutineScope(Dispatchers.IO).launch {
-                            if (checkNewUser(idToken)) {
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    RoomRepository.postUserAuth(idToken)
-                                }
-                            }
-                        }
+                        checkNewUser()
                         updateUI()
                     }
                     else Log.w(tag, "signInWithCredential:failure", task.exception)
@@ -100,12 +94,33 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    suspend fun checkNewUser(idToken: String):Boolean {
-        val RetCo = CoroutineScope(Dispatchers.IO).async {
-            RoomRepository.getUserInfo(idToken)
-        }
-        return RetCo.await()
+    fun checkNewUser() {
+
+        val mUser = FirebaseAuth.getInstance().currentUser
+        mUser!!.getIdToken(true)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val idToken = task.result.token
+                        val RetCo = CoroutineScope(Dispatchers.IO).async {
+                            RoomRepository.getUserInfo(idToken!!)
+                        }
+
+                        CoroutineScope(Dispatchers.IO).async {
+                            var curUser: User? = RetCo.await()
+                            if (curUser == null) {
+                                Log.d("Token", "Write New Token")
+                                RoomRepository.postUserAuth(idToken!!)
+                                curUser = RoomRepository.getUserInfo(idToken!!)
+                            }
+                            RoomRepository.setCurrentUser(curUser!!)
+                            RoomRepository.printLog()
+                        }
+                    } else {
+                        // Handle error -> task.getException();
+                    }
+                }
     }
+
 
     private fun updateUI() {
         if (Firebase.auth.currentUser != null) {
