@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.topgoal.db.RoomRepository
 import com.example.topgoal.model.Chat
+import com.example.topgoal.model.SocketChat
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -53,17 +54,8 @@ class ChatViewModel: ViewModel() {
                 })
 
         mStompClient.connect()
-
-        // 채팅방 참가 메세지 전송
-        compositeDisposable.add(mStompClient
-                .send("/app/join", "").subscribe({
-                    Log.v(TAG, "Join Chat")
-                }, {
-                    Log.e(TAG, it.stackTrace.toString())
-                }))
-
+        joinMessage()
     }
-
 
 
     fun addChat(newChat: Chat){
@@ -82,24 +74,42 @@ class ChatViewModel: ViewModel() {
     private fun registerSubscriptions() {
         compositeDisposable.add(
                 mStompClient.topic("/topic/chat/${RoomRepository.roomId}").subscribe ({ topicMessage->
-                    val ChatInfo = Gson().fromJson(topicMessage.payload, Chat::class.java)
-                    addChat(ChatInfo)
+                    val ChatInfo = Gson().fromJson(topicMessage.payload, SocketChat::class.java)
+                    addChat(convertSocketToChat(ChatInfo))
                     Log.d(TAG,"Receive Message")
                         }, {
                     Log.e(TAG, it.stackTrace.toString())
                         }))
     }
 
+    fun joinMessage() {
+        val newChat = SocketChat(
+                "님이 입장하셨습니다.",
+                RoomRepository.roomId,
+                RoomRepository.userId,
+                RoomRepository.userPic?:"")
+
+        compositeDisposable.add(mStompClient
+                .send("/app/join", makeJsonString(newChat)).subscribe({
+                    Log.v(TAG, "Join Chat")
+                    addChat(convertSocketToChat(newChat))
+                }, {
+                    Log.e(TAG, it.stackTrace.toString())
+                }))
+    }
+
     //send message
     fun send(message: String) {
-        val newChat :Chat = Chat(RoomRepository.userName,
-                RoomRepository.userPic,
+        val newChat = SocketChat(
                 message,
-                getCurrentTime())
+                RoomRepository.roomId,
+                RoomRepository.userId,
+                RoomRepository.userPic?:"")
 
         compositeDisposable.add(mStompClient
                 .send("/app/message/", makeJsonString(newChat)).subscribe({
                     Log.v(TAG, "Send Message")
+                    addChat(convertSocketToChat(newChat))
                 }, {
                     Log.e(TAG, it.stackTrace.toString())
                 }))
@@ -112,9 +122,13 @@ class ChatViewModel: ViewModel() {
         return formattedDate
     }
 
-    fun makeJsonString(newchat: Chat):String{
+    fun makeJsonString(newchat: SocketChat):String{
         val gson = Gson()
         val jsonString: String = gson.toJson(newchat)
         return jsonString
+    }
+
+    fun convertSocketToChat(socketChat : SocketChat): Chat{
+        return Chat(socketChat.userID, socketChat.url, socketChat.message, getCurrentTime())
     }
 }
