@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentUserDialogBinding
+import com.example.topgoal.db.RoomRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -23,16 +24,15 @@ class UserDialogFragment: DialogFragment() {
     ): View? {
         _binding = FragmentUserDialogBinding.inflate(inflater, container, false)
         val view = binding.root
-        val user = Firebase.auth.currentUser!!
-        user.let {
-            for (profile in it.providerData) {
-                binding.name.text = profile.displayName
-                binding.email.text = profile.email
-                Glide.with(this).load(profile.photoUrl)
-                    .circleCrop()
-                    .into(binding.imageView)
-            }
-        }
+
+
+        binding.name.text = RoomRepository.userName
+        binding.email.text = RoomRepository.userId
+        Glide.with(this).load(RoomRepository.userPic)
+                ?.circleCrop()
+                .into(binding.imageView)
+
+
         binding.appBar.setNavigationOnClickListener { parentFragmentManager.popBackStack() }
         binding.logout.setOnClickListener {
             createAlertDialog(R.string.logout_message, "logout")
