@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentHomeBinding
 import com.example.topgoal.db.RoomRepository
+import com.google.android.youtube.player.internal.g
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.DisposableHandle
@@ -53,9 +54,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-        Glide.with(this).load(Firebase.auth.currentUser?.photoUrl)
-            .circleCrop()
-            .into(binding.user)
+        Glide.with(this).load(RoomRepository.userPic)
+                ?.circleCrop()
+                .into(binding.user)
 
         return view
     }
