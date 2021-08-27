@@ -34,7 +34,7 @@ class Holder(val binding: RecyclerChatBinding): RecyclerView.ViewHolder(binding.
         binding.txTime.text = chat.time
 
         Glide.with(itemView).load(chat.photo)
-                ?.circleCrop()
+                .circleCrop()
                 .into(binding.imageView2)
     }
 

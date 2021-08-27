@@ -13,8 +13,9 @@ class RoomRepository {
     companion object {
         lateinit var userToken: String
         lateinit var userId: String
+        lateinit var userEmail: String
         lateinit var userName: String
-        var userPic: String? = null
+        lateinit var userPic: String
 
         lateinit var roomId: String
         lateinit var adminId: String
@@ -33,6 +34,7 @@ class RoomRepository {
             userToken = currentUser.idToken
             userId = currentUser.id
             userName = currentUser.name
+            userEmail = currentUser.email
             userPic = currentUser.userPic
         }
 

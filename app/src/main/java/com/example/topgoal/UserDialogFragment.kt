@@ -27,9 +27,9 @@ class UserDialogFragment: DialogFragment() {
 
 
         binding.name.text = RoomRepository.userName
-        binding.email.text = RoomRepository.userId
+        binding.email.text = RoomRepository.userEmail
         Glide.with(this).load(RoomRepository.userPic)
-                ?.circleCrop()
+                .circleCrop()
                 .into(binding.imageView)
 
 
