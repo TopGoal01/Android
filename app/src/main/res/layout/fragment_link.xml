@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".add.LinkFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <EditText
+        android:id="@+id/edt_link"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Enter a Youtube Link"
+        android:backgroundTint="@color/purple_light"
+        android:textCursorDrawable="@color/purple_light"
+        android:textColorHighlight="@color/purple_light"
+        android:textSelectHandle="@drawable/select_handler"
+        android:textSelectHandleLeft="@drawable/select_handler"
+        android:textSelectHandleRight="@drawable/select_handler"
+        android:layout_marginTop="20sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="20sp"/>
+
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="Search"
+        android:layout_gravity="center"
+        android:layout_marginRight="10sp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/tx_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center" />
+
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="ADD"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20sp"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:background="@drawable/button_round"/>
+</LinearLayout>
+</ScrollView>
