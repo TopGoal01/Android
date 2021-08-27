@@ -3,7 +3,9 @@ package com.example.topgoal.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.RecyclerChatBinding
+import com.example.topgoal.db.RoomRepository
 import com.example.topgoal.model.Chat
 
 class ChatAdapter: RecyclerView.Adapter<Holder>() {
@@ -30,6 +32,10 @@ class Holder(val binding: RecyclerChatBinding): RecyclerView.ViewHolder(binding.
         binding.txName.text = chat.name
         binding.txContent.text = chat.content
         binding.txTime.text = chat.time
+
+        Glide.with(itemView).load(chat.photo)
+                .circleCrop()
+                .into(binding.imageView2)
     }
 
 }

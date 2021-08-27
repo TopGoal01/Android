@@ -1,10 +1,12 @@
 package com.example.topgoal.main
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,29 +45,29 @@ class ChatFragment : Fragment() {
         chatVm.chatList.observe(    viewLifecycleOwner, Observer {
             adapter.chatList = chatVm.ChatList
             adapter.notifyDataSetChanged()
-            binding.recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            if( adapter.itemCount >= 1)
+                binding.recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
         })
 
 
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnChat.setOnClickListener {
             val content = binding.edtChat.text.toString()
-            val newChat = Chat("강세희", "",content, getCurrentTime())
-            chatVm.addChat(newChat)
+            chatVm.send(content)
             binding.edtChat.setText(null)
         }
     }
 
-    fun getCurrentTime():String{
-        val time = System.currentTimeMillis()
-        var sdf = SimpleDateFormat("HH:mm")
-        var formattedDate = sdf.format(time)
-        return formattedDate
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onDestroy() {
+        chatVm.destoryWebSocket()
+        super.onDestroy()
     }
 
 }

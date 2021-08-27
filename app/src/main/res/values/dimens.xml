@@ -11,4 +11,6 @@
     <dimen name="space_20">20dp</dimen>
 
     <dimen name="txt_medium">15sp</dimen>
+    <dimen name="message">15sp</dimen>
+
 </resources>

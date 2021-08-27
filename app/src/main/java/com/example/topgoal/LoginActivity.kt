@@ -12,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.topgoal.databinding.ActivityLoginBinding
+import com.example.topgoal.db.RoomRepository
+import com.example.topgoal.db.roomItem.User
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -21,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -59,35 +66,69 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.btnLogin.setOnClickListener { handleSignInResult.launch(googleSignInClient.signInIntent) }
 
         binding.constraintLayout.addView(CustomView(this))
 
         // Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         // Firebase Auth
         auth = Firebase.auth
     }
 
-    override fun onStart() {
-        super.onStart()
-        updateUI()
-    }
-
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(tag, "signInWithCredential:success")
-                    updateUI()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(tag, "signInWithCredential:success")
+                        CoroutineScope(Dispatchers.Main).launch {
+                            checkNewUser()
+                        }
+                    }
+                    else Log.w(tag, "signInWithCredential:failure", task.exception)
                 }
-                else Log.w(tag, "signInWithCredential:failure", task.exception)
-            }
+    }
+
+
+    suspend fun checkNewUser() {
+        val mUser = FirebaseAuth.getInstance().currentUser
+        mUser!!.getIdToken(false)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val idToken = task.result.token
+                        setCurUser(mUser, idToken?:"")
+
+                        val RetCo = CoroutineScope(Dispatchers.IO).async {
+                            RoomRepository.getUserInfo(idToken!!)
+                        }
+
+                        CoroutineScope(Dispatchers.IO).async {
+                            var curUser: User? = RetCo.await()
+                            if (curUser == null) {
+                                Log.d("Token", "Write New Token")
+                                RoomRepository.postUserAuth(idToken!!)
+                            }
+                        }
+                        updateUI()
+                    } else {
+                        // Handle error -> task.getException();
+                    }
+                }
+    }
+
+    fun setCurUser(mUser: FirebaseUser, idToken: String){
+        val curUserId = mUser.uid
+        val curUserPhoto = mUser.photoUrl
+        val curUserEmail = mUser.email
+        val curUserName = mUser.displayName
+        RoomRepository.setCurrentUser(User(curUserEmail?:"", curUserId, idToken?:"",curUserName?:"", curUserPhoto.toString()))
+
     }
 
     private fun updateUI() {

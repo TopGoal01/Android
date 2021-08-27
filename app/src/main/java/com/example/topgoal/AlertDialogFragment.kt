@@ -37,6 +37,7 @@ class AlertDialogFragment: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAlertDialogBinding.inflate(inflater, container, false)
+        val view = binding.root
         val returnIntent = Intent()
         val user = Firebase.auth.currentUser!!
         binding.txtMessage.text = message
@@ -57,7 +58,8 @@ class AlertDialogFragment: DialogFragment() {
             mainActivity?.returnToPage(returnIntent)
         }
         binding.constraintLayout.setOnClickListener { parentFragmentManager.popBackStack() }
-        return binding.root
+        return view
+
     }
 
     override fun onAttach(context: Context) {

@@ -10,8 +10,12 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.example.topgoal.databinding.FragmentHomeBinding
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.example.topgoal.db.RoomRepository
+import com.google.android.youtube.player.internal.g
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -20,23 +24,38 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val view = binding.root
+
         binding.btnUser.setOnClickListener {
-            startFragment(UserDialogFragment(), null)
+            parentFragmentManager.commit {
+                add(android.R.id.content, UserDialogFragment())
+                addToBackStack(null)
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            }
         }
         binding.btnCreate.setOnClickListener {
-            val intent = Intent(requireContext(), RoomActivity::class.java)
-            startActivity(intent)
+            CoroutineScope(Dispatchers.IO).launch {
+                if (RoomRepository.postRoom()){
+                    val intent = Intent(requireContext(), RoomActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
         binding.btnStart.setOnClickListener {
-            startFragment(RoomFragment(), "roomFragment")
+            parentFragmentManager.commit {
+                add(R.id.frameLayout, RoomFragment())
+                addToBackStack("roomFragment")
+                setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            }
         }
 
-        Glide.with(this).load(Firebase.auth.currentUser?.photoUrl)
-            .circleCrop()
-            .into(binding.btnUser)
+        Glide.with(this).load(RoomRepository.userPic)
+                ?.circleCrop()
+                .into(binding.btnUser)
 
-        return binding.root
+        return view
     }
 
     private fun startFragment(fragment: Fragment, name: String?) {
