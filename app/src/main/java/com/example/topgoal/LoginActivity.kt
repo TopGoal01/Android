@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -66,6 +67,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        RoomRepository.setRoomNull()
+        RoomRepository.setCurrentUserNull()
+
         binding.button.setOnClickListener { handleSignInResult.launch(googleSignInClient.signInIntent) }
 
         binding.constraintLayout.addView(CustomView(this))
@@ -86,21 +90,23 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(tag, "signInWithCredential:success")
-                        checkNewUser()
-                        updateUI()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            checkNewUser()
+                        }
                     }
                     else Log.w(tag, "signInWithCredential:failure", task.exception)
                 }
     }
 
 
-    fun checkNewUser() {
-
+    suspend fun checkNewUser() {
         val mUser = FirebaseAuth.getInstance().currentUser
-        mUser!!.getIdToken(true)
+        mUser!!.getIdToken(false)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val idToken = task.result.token
+                        setCurUser(mUser, idToken?:"")
+
                         val RetCo = CoroutineScope(Dispatchers.IO).async {
                             RoomRepository.getUserInfo(idToken!!)
                         }
@@ -110,17 +116,23 @@ class LoginActivity : AppCompatActivity() {
                             if (curUser == null) {
                                 Log.d("Token", "Write New Token")
                                 RoomRepository.postUserAuth(idToken!!)
-                                curUser = RoomRepository.getUserInfo(idToken!!)
                             }
-                            RoomRepository.setCurrentUser(curUser!!)
-                            RoomRepository.printLog()
                         }
+                        updateUI()
                     } else {
                         // Handle error -> task.getException();
                     }
                 }
     }
 
+    fun setCurUser(mUser: FirebaseUser, idToken: String){
+        val curUserId = mUser.uid
+        val curUserPhoto = mUser.photoUrl
+        val curUserEmail = mUser.email
+        val curUserName = mUser.displayName
+        RoomRepository.setCurrentUser(User(curUserEmail?:"", curUserId, idToken?:"",curUserName?:"", curUserPhoto.toString()))
+
+    }
 
     private fun updateUI() {
         if (Firebase.auth.currentUser != null) {
