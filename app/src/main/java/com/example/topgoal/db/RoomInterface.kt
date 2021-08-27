@@ -17,7 +17,7 @@ interface RoomInterface {
     @DELETE("room/{roomId}")
     suspend fun deleteRoom(
             @Path("roomId") roomId: String
-    )
+    ):Response<Unit>
 
     @POST("room/{userToken}")
     suspend fun postRoom(
@@ -40,7 +40,7 @@ interface RoomInterface {
     suspend fun deleteRoomUser(
             @Path("roomId") roomId: String,
             @Query("userToken") userToken: String
-    )
+    ):Response<Unit>
 
     @GET("member/rooms")
     suspend fun getUsers(
