@@ -16,14 +16,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompMessage
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -43,22 +41,21 @@ class ChatViewModel: ViewModel() {
         _chatList.value = ChatList
         mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
+        registerSubscriptions()
         compositeDisposable.add(mStompClient.lifecycle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { lifecycleEvent ->
                 when (lifecycleEvent.type) {
                     LifecycleEvent.Type.OPENED -> {
-                        Log.d(TAG,"chat Web Socket Open!")
-                        registerSubscriptions()
+                        Log.d(TAG, "chat Web Socket Open!")
                         joinMessage()
-
                     }
                     LifecycleEvent.Type.ERROR -> {
                         Log.d(TAG, TAG, lifecycleEvent.exception)
                     }
                     LifecycleEvent.Type.CLOSED -> {
-                        Log.d(TAG,"chat Web Socket Closed")
+                        Log.d(TAG, "chat Web Socket Closed")
                     }
                     LifecycleEvent.Type.FAILED_SERVER_HEARTBEAT -> {
                     }
@@ -90,13 +87,14 @@ class ChatViewModel: ViewModel() {
             .topic("/topic/chat/${RoomRepository.roomId}")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe ({ topicMessage->
+            .subscribe({ topicMessage ->
                 val ChatInfo = Gson().fromJson(topicMessage.payload, SocketChat::class.java)
                 addChat(convertSocketToChat(ChatInfo))
-                Log.d(TAG,"Receive Message")
+                Log.d(TAG, "Receive Message")
             }, {
                 Log.d(TAG, "Recieve Message" + it.stackTrace.toString())
-            }))
+            })
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -105,8 +103,9 @@ class ChatViewModel: ViewModel() {
             "${RoomRepository.userName}님이 입장하셨습니다.",
             RoomRepository.roomId,
             RoomRepository.userId,
-            RoomRepository.userPic?:"",
-            LocalDateTime.now())
+            RoomRepository.userPic,
+            getCurrentTime(LocalDateTime.now()),
+            RoomRepository.userName)
 
         Log.d(TAG, makeJsonString(newChat))
         compositeDisposable.add(mStompClient
@@ -115,10 +114,10 @@ class ChatViewModel: ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d(TAG, "Join Chat")
-                addChat(convertSocketToChat(newChat))
             }, {
                 Log.d(TAG, it.stackTrace.toString())
-            }))
+            })
+        )
     }
 
     //send message
@@ -127,25 +126,31 @@ class ChatViewModel: ViewModel() {
         val newChat = SocketChat(
             message,
             RoomRepository.roomId,
-            RoomRepository.userName,
-            RoomRepository.userPic?:"",
-            LocalDateTime.now())
+            RoomRepository.userId,
+            RoomRepository.userPic,
+            getCurrentTime(LocalDateTime.now()),
+            RoomRepository.userName)
 
         Log.d(TAG, makeJsonString(newChat))
         compositeDisposable.add(mStompClient
             .send("/app/message", makeJsonString(newChat))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d(TAG, "Send Message")
-                addChat(convertSocketToChat(newChat))
             }, {
                 Log.d(TAG, it.stackTrace.toString())
-            }))
+            })
+        )
     }
 
     fun getCurrentTime(localDateTime: LocalDateTime): String{
-        return "${localDateTime.hour.toString()}:${localDateTime.minute.toString()}"
+        return localDateTime.toString()
+    }
+
+    fun getCurrentMinute(curTime: String):String{
+        val z = LocalDateTime.parse(curTime)
+        val hour = z.hour
+        val minute = z.minute
+        return "${hour}:${minute}"
     }
 
     fun makeJsonString(newchat: SocketChat):String{
@@ -154,7 +159,10 @@ class ChatViewModel: ViewModel() {
         return jsonString
     }
 
-    fun convertSocketToChat(socketChat : SocketChat): Chat{
-        return Chat(socketChat.userID, socketChat.picUrl, socketChat.message, getCurrentTime(socketChat.localDateTime))
+    fun convertSocketToChat(socketChat: SocketChat): Chat{
+        return Chat(
+            socketChat.userName, socketChat.picUrl, socketChat.message,
+                getCurrentMinute(socketChat.localDateTime)
+            )
     }
 }
